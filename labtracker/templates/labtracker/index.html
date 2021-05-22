@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Lab Finder</title>
+        <meta name="description" content="">
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel ="stylesheet"
+        <link rel="stylesheet" href="./index.css">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block javascript %}
+        <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+     {% endblock javascript %}
+        
+    </head>
+    <body>
+    <!-- Parent div-->
+{% comment %} <div>
+      {%if lab_list%}
+<ul>
+{%for Lab in lab_list%}
+<li>{{Lab.name}}</li>
+<li>{{Lab.Address}}</li>
+{% endfor %}
+</ul>
+{% else %}
+<p> no lab availabele </p>
+{% endif %}
+</div> {% endcomment %}
+
+<nav class="navbar navbar-dark bg-primary">
+  <a class="navbar-brand" href={% url 'home'%}>Home</a>
+  <a class="navbar-brand" href= {% url 'second'%}>See nearest ICMR labs list </a>
+  <a class="navbar-brand" href={% url 'account_logout'%}>logout</a>
+
+</nav>
+
+<div>
+
+ <div id="map">
+<section class="text-gray-600 body-font relative">
+  <div class="absolute inset-0 bg-gray-300">
+   {%if query%}
+    <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps/embed/v1/place?key=AIzaSyC_ub8A9brQFO_YR3J0HY6st_5Wgk_44cs&q={{query}}&maptype=satellite " style="filter: grayscale(0.5) contrast(1.2) opacity(1.0);"></iframe>
+    {% else %}
+    <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps/embed/v1/place?key=AIzaSyC_ub8A9brQFO_YR3J0HY6st_5Wgk_44cs&q=ICMR-National+Institute+of+Malaria+Research,Sector+8+Dwarka,New+Delhi+india&maptype=satellite " style="filter: grayscale(0.5) contrast(1.2) opacity(1.0);"></iframe>
+{% endif %}
+  </div>
+  <div class="container px-5 py-24 mx-auto flex">
+    <div class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
+      <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Find  nearest ICMR Lab</h2>
+      <p class="leading-relaxed mb-5 text-gray-600">find nearest icmr lab from the list below or search </p>
+      <p> {{search_text}}</p>
+      <div class="relative mb-4">
+        
+     <!-- This example requires Tailwind CSS v2.0+ -->
+<div class="relative inline-block text-left">
+<div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     All ICMR labs
+      <!-- Heroicon name: solid/chevron-down -->
+     
+    </button>
+{%if lab_list%}
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+   
+ 
+   {%for Lab in lab_list%}
+   <form type="get" action="{% url 'search_lab'%}"  >
+  <input type="hidden" value={{Lab.name}}  id="search_box">
+     <a class="dropdown-item" id ="" href="{% url 'search_lab'%}"  onclick= "this.href= this.href+'?search_box='+'{{Lab.name}}'" value ={{Lab.name}} >{{Lab.name}}</a>
+     </form>
+      {% endfor %}
+  </div>
+ 
+{% endif %}
+  </div>
+ <br />
+ <p></p>
+ 
+
+  <!--
+    Dropdown panel, show/hide based on dropdown state.
+
+    Entering: "transition ease-out duration-100"
+      From: "transform opacity-0 scale-95"
+      To: "transform opacity-100 scale-100"
+    Leaving: "transition ease-in duration-75"
+      From: "transform opacity-100 scale-100"
+      To: "transform opacity-0 scale-95"
+  -->
+  
+</div>
+
+
+      </div>
+      <div class="relative mb-4">
+     
+      </div>
+
+      <form type="get" action="{% url 'search_lab'%}" style="margin: 0">
+    <input  id="search_box" type="text" name="search_box"  placeholder="Search..." >
+   <button  id="search_submit" class="text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg" type="submit">Search</button> 
+</form>
+  
+  
+ {%if records.name and records.address  %}
+
+<div class="card text-center" style="margin-top:20px;">
+  <div class="card-header">
+   Icmr lab  search details
+  </div>
+  <div class="card-body">
+    <label for="exampleInputPassword1">Lab Name</label>
+    <p class="card-text">{{records.name}}.</p>
+    <label for="exampleInputPassword1">Lab Address</label>
+    <p class="card-text">{{records.address}}.</p>
+    
+
+{% comment %} {% for lab in records_list  %}
+    <label for="exampleInputPassword1">Lab Name</label>
+    <p class="card-text">{{lab.name}}.</p>
+    <label for="exampleInputPassword1">Lab Address</label>
+    <p class="card-text">{{lab.address}}.</p>
+    {% endfor %} {% endcomment %}
+
+  </div>
+  
+</div>
+   {% endif %}
+      
+      <p class="text-xs text-gray-500 mt-3">All the location shown are updated frequently to give you best possible experience.</p>
+       <p class="text-xs text-gray-500 mt-3"> </p>
+       <p class="text-xs text-gray-500 mt-3"> </p>
+       <p class="text-xs text-gray-500 mt-3"> </p>
+    </div>
+      <p> </p>
+ <p> </p>
+ <p></p>
+ <p> </p>
+  </div>
+  <p> </p>
+  <br />
+</section>
+
+
+ </div> 
+ </div> {% comment %}  parent div       {% endcomment %}
+
+
+     <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+        <script src="./index.js" async defer></script>
+        
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<div class="modal-dialog modal-dialog-centered" role="document" >
+<div class="modal-content" style=" background-image:url('https://www.geeklawblog.com/wp-content/uploads/sites/528/2018/12/liprofile-656x369.png') ; padding:40px" color:white>
+<h1>{% trans "Sign Up" %}</h1>
+
+<p>{% blocktrans %}Already have an account? Then please<button class="btn btn-link"> <a href="{{ login_url }}" style="color:yellow">sign in</a></button>{% endblocktrans %}</p>
+
+<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  <style>
+  input {
+	
+  color: #333333 !important;
+}
+ </style>
+  {{ form.as_p }}
+
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+   
+  <button class="btn btn-success" type="submit">{% trans "Sign Up" %} &raquo;</button>
+</form>
+</div>
+</div>
+{% endblock %}
