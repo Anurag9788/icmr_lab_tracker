@@ -27,7 +27,7 @@ SECRET_KEY = 'b8j%nd45e(21dln$vr+&!74-4!a1=*iw^7id*1v7s#kd+@cpm0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://icmrlabtracker.herokuapp.com','localhost','127.0.0.1']
 
 
 # Application definition
