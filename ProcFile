@@ -1,1 +1,0 @@
-web: gunicorn trackerapp.wsgi --timeout 80
