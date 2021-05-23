@@ -125,6 +125,7 @@ def search_near_lab (request):
                     response = response.city.name
                 if str(response)=='Pune':
                     response='nagpur'
+                print(response)
                 record = Lab.objects.filter(address__icontains=(response))
                 record = random.sample(list(record), 1)[0]
                 context['record'] = record
