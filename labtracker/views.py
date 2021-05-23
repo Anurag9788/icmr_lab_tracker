@@ -89,11 +89,12 @@ def searc_lab_list(request):
 
         
         search_query = request.GET.get('search_box', None)
-    
+        print(search_query)
+
         
         context={}
         if search_query is not None:
-            
+            print("below recors list")
             records_list =Lab.objects.filter(address__contains=search_query)
             
             context['records_list'] = records_list
