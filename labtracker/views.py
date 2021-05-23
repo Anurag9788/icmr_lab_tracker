@@ -95,7 +95,7 @@ def searc_lab_list(request):
         context={}
         if search_query is not None:
             print("below recors list")
-            records_list =Lab.objects.filter(address__contains=search_query)
+            records_list =Lab.objects.filter(address__contains=str(search_query))
             print(records_list)
             context['records_list'] = records_list
         else:
