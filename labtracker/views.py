@@ -48,6 +48,7 @@ def serach_view(request):
             search_text=search_text,
             mapbox_token = Mapbox_token
             )
+
             data= json.loads(requests.get(url).content.decode('utf-8'))
             data = data['features']
         
@@ -100,18 +101,31 @@ def search_near_lab (request):
         if ip_valid:
             reader = geoip2.database.Reader('./GeoLite2-City_20210518/GeoLite2-City.mmdb')
             try:
-                response = reader.city(ip)
+                url1 ="https://ipgeolocation.abstractapi.com/v1/?api_key={key}&ip_address={ip}"
+                url1 = url1.format(
+                key='cfd4c58a01a340959a39aad7e3275e4d',
+                ip = ip
+                )
+
+                data_lo= (requests.get(url1))
+                data_lo = json.loads(data_lo.text)['city']
+                response = data_lo
+                
+
+
+                
             except:
-                response = reader.city('223.187.147.41')
-            print(response.country.iso_code)
-            print(response.country.name)
-            print(response.subdivisions.most_specific.name)
-            print(response.subdivisions.most_specific.iso_code)
-            print(response.city.name)
-            print(response.postal.code)
-            print(response.location.latitude)
-            print(response.location.longitude)
-            record = Lab.objects.filter(address__icontains=(response.city.name)).first()
+                response = reader.city(ip)
+                print(response.country.iso_code)
+                print(response.country.name)
+                print(response.subdivisions.most_specific.name)
+                print(response.subdivisions.most_specific.iso_code)
+                print(response.city.name)
+                print(response.postal.code)
+                print(response.location.latitude)
+                print(response.location.longitude)
+                response = response.city.name
+            record = Lab.objects.filter(address__icontains=(response)).first()
             context['record'] = record
         else:
             context['record'] = " "
