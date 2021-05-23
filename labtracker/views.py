@@ -16,6 +16,7 @@ import socket
 import geoip2.database
 
 
+
 # Create your views here.
 def index(request):
     lab_list=Lab.objects.order_by("name")
@@ -98,6 +99,7 @@ def searc_lab_list(request):
             context['records_list'] = records_list
         else:
             context['records_list'] = " "
+            print(records_list)
 
     return render(request,'labtracker/second.html',context)   
 
