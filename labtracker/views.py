@@ -30,12 +30,16 @@ def serach_view(request):
     if request.method == 'GET': # If the form is submitted
         
         search_query = request.GET.get('search_box', None)
+
         lab_list=Lab.objects.order_by("name")
+        print(lab_list)
         context={ 'lab_list': lab_list}
 
         if search_query is not None:
             records=Lab.objects.filter(name__contains=search_query).first()
+            print(records)
             records_list =Lab.objects.filter(name__contains=search_query)
+            print(records_list)
             search_text="icmr+delhi"
             if records is not None:
                 search_text = parse.quote(records.address)
