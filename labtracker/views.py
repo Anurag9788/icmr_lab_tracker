@@ -14,6 +14,7 @@ import json
 from trackerapp.settings import BASE_DIR
 import socket
 import geoip2.database
+import random
 
 
 
@@ -101,32 +102,38 @@ def search_near_lab (request):
         if ip_valid:
             reader = geoip2.database.Reader('./GeoLite2-City_20210518/GeoLite2-City.mmdb')
             try:
-                url1 ="https://ipgeolocation.abstractapi.com/v1/?api_key={key}&ip_address={ip}"
-                url1 = url1.format(
-                key='cfd4c58a01a340959a39aad7e3275e4d',
-                ip = ip
-                )
+                try:
+                    url1 ="https://ipgeolocation.abstractapi.com/v1/?api_key={key}&ip_address={ip}"
+                    url1 = url1.format(
+                    key='cfd4c58a01a340959a39aad7e3275e4d',
+                    ip = ip
+                    )
 
-                data_lo= (requests.get(url1))
-                data_lo = json.loads(data_lo.text)['city']
-                response = data_lo
-                
-
-
-                
+                    data_lo= (requests.get(url1))
+                    data_lo = json.loads(data_lo.text)['city']
+                    response = data_lo
+                except:
+                    response = reader.city(ip)
+                    print(response.country.iso_code)
+                    print(response.country.name)
+                    print(response.subdivisions.most_specific.name)
+                    print(response.subdivisions.most_specific.iso_code)
+                    print(response.city.name)
+                    print(response.postal.code)
+                    print(response.location.latitude)
+                    print(response.location.longitude)
+                    response = response.city.name
+                if str(response)=='Pune':
+                    response='nagpur'
+                record = Lab.objects.filter(address__icontains=(response))
+                record = random.sample(list(record), 1)[0]
+                context['record'] = record
             except:
-                response = reader.city(ip)
-                print(response.country.iso_code)
-                print(response.country.name)
-                print(response.subdivisions.most_specific.name)
-                print(response.subdivisions.most_specific.iso_code)
-                print(response.city.name)
-                print(response.postal.code)
-                print(response.location.latitude)
-                print(response.location.longitude)
-                response = response.city.name
-            record = Lab.objects.filter(address__icontains=(response)).first()
-            context['record'] = record
+                record = Lab.objects.filter(address__icontains='nagpur')
+                record = random.sample(list(record), 1)
+                print(record)
+                context['record'] = record[0]           
+            
         else:
             context['record'] = " "
 
