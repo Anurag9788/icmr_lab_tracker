@@ -36,10 +36,9 @@ def serach_view(request):
         context={ 'lab_list': lab_list}
 
         if search_query is not None:
-            records=Lab.objects.filter(name__contains=search_query).first()
-            print(records)
-            records_list =Lab.objects.filter(name__contains=search_query)
-            print(records_list)
+            records=Lab.objects.filter(name__icontains=search_query).first()
+            records_list =Lab.objects.filter(name__icontains=search_query)
+            
             search_text="icmr+delhi"
             if records is not None:
                 search_text = parse.quote(records.address)
@@ -65,32 +64,6 @@ def serach_view(request):
 def searc_lab_list(request):
     if request.method == 'GET': # If the form is submitted
 
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-            print(ip)
-        try:
-            socket.inet_aton(ip)
-            ip_valid = True
-        except socket.error:
-            ip_valid = False
-        if ip_valid:
-            reader = geoip2.database.Reader('./GeoLite2-City_20210518/GeoLite2-City.mmdb')
-            response = reader.city('223.187.147.41')
-            print(response.country.iso_code)
-            print(response.country.name)
-            print(response.subdivisions.most_specific.name)
-            print(response.subdivisions.most_specific.iso_code)
-            print(response.city.name)
-            print(response.postal.code)
-            print(response.location.latitude)
-            print(response.location.longitude)
-
-
-
         
         search_query = request.GET.get('search_box', None)
         print(search_query)
@@ -99,7 +72,7 @@ def searc_lab_list(request):
         context={}
         if search_query is not None:
             print("below recors list")
-            records_list =Lab.objects.filter(address__contains=str(search_query))
+            records_list =Lab.objects.filter(address__icontains=str(search_query))
             print(records_list)
             context['records_list'] = records_list
         else:
@@ -138,7 +111,7 @@ def search_near_lab (request):
             print(response.postal.code)
             print(response.location.latitude)
             print(response.location.longitude)
-            record = Lab.objects.filter(address__contains=(response.city.name)).first()
+            record = Lab.objects.filter(address__icontains=(response.city.name)).first()
             context['record'] = record
         else:
             context['record'] = " "
