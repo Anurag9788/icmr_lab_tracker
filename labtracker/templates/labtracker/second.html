@@ -76,15 +76,18 @@
         </a>
          </form>
       </div>
+      {% elif " " in  record %}
+      <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">no record exist</h2>
     {% endif %}
 
 
-    {% for lab in records_list  %}
-    
+{% if  'empty' in records_list   %}
+ <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">Currently there are no I.C.M.R Labs in {{searc}} .Please use the location button to get nearest possible I.C.M.R Labs based on your current location </h2>
   
-
-    
-    
+     {% else  %}
+       {% for lab in records_list  %} 
+       
+     
       <div class="xl:w-1/4 lg:w-1/2 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
       <form type="get" action="{% url 'search_lab'%}"  >
         <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">{{lab.name}}</h2>
@@ -96,10 +99,13 @@
         </a>
          </form>
       </div>
+      
+      
      
-
-
      {% endfor %}
+     
+      {% endif %}
+  
       
     </div>
     {% comment %} <button class="flex mx-auto mt-16 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">Button</button> {% endcomment %}

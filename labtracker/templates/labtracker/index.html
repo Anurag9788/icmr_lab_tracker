@@ -39,7 +39,7 @@
 
 <nav class="navbar navbar-dark bg-primary">
   <a class="navbar-brand" href={% url 'home'%}>Home</a>
-  <a class="navbar-brand" href= {% url 'second'%}>See nearest ICMR labs list </a>
+  <a class="navbar-brand" href= {% url 'second'%}>See nearest I.C.M.R Labs </a>
   <a class="navbar-brand" href={% url 'account_logout'%}>logout</a>
 
 </nav>
@@ -113,8 +113,11 @@
    <button  id="search_submit" class="text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg" type="submit">Search</button> 
 </form>
   
+  {% if  'empty' in records   %}
+ <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">Currently there are no I.C.M.R Labs in {{searc}} </h2>
   
- {%if records.name and records.address  %}
+    
+ {%elif records.name and records.address  %}
 
 <div class="card text-center" style="margin-top:20px;">
   <div class="card-header">

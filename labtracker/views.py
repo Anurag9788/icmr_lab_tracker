@@ -40,6 +40,7 @@ def serach_view(request):
             records=Lab.objects.filter(name__icontains=search_query).first()
             records_list =Lab.objects.filter(name__icontains=search_query)
             
+            
             search_text="icmr+delhi"
             if records is not None:
                 search_text = parse.quote(records.address)
@@ -55,8 +56,14 @@ def serach_view(request):
         
             context['co-ordinate']= data[0]['center']
             context['query']    = search_text
-            context['records'] = records
+            context['searc'] = search_query
+            
+            if not records :
+                context['records'] = "empty"
+            else:
+                context['records'] = records
             context['records_list'] = records_list
+            
         else:
             data = " "
         
@@ -76,9 +83,16 @@ def searc_lab_list(request):
             print("below recors list")
             records_list =Lab.objects.filter(address__icontains=str(search_query))
             print(records_list)
-            context['records_list'] = records_list
+            if not records_list :
+                context['records_list'] = "empty"
+                
+            else:
+                context['records_list'] = records_list
+            print( context['records_list'])
+            context['searc'] = search_query
         else:
             context['records_list'] = " "
+            context['searc'] =" "
             print(records_list)
 
     return render(request,'labtracker/second.html',context)   
